@@ -19,6 +19,8 @@ def onQQMessage(bot, contact, member, content):
             r =requests.get("http://hb-api.newitd.com/user_info",data,timeout=30)
             if result.status_code == 200:
                 bot.SendTo(contact,r.text)
+            else:
+                bot.SendTo(contact,"fail to check points")
         if phone:
             code, res = bind_id(phone, contact.uin, 1)
             bot.SendTo(contact, res)
