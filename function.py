@@ -2,8 +2,16 @@ import pymysql
 import requests
 import json
 import re
-from config import *
+#from config import *
 from text_config import *
+
+def check_points(str):
+    try:
+        str=str.strip("查询")
+        res=re.search('(1[0-9]{10})',str).group(1)
+        return res
+    except:
+        return False
 
 
 def check_url(url):

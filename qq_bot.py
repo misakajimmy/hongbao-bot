@@ -1,7 +1,7 @@
 from qqbot import QQBotSlot as qqbotslot, RunBot
 from qqbot import _bot as bot
 from function import *
-
+import requests
 
 @qqbotslot
 def onQQMessage(bot, contact, member, content):
@@ -10,6 +10,15 @@ def onQQMessage(bot, contact, member, content):
             bot.SendTo(contact, help_text)
         phone = check_phone(content)
         url = change_url(content)
+        cphone=check_points(content)
+        if "查询" in content and cphone:
+            data = {
+            "phone": cphone,
+            "url": ""
+            }
+            r =requests.get("http://hb-api.newitd.com/user_info",data,timeout=30)
+            if result.status_code == 200:
+                bot.SendTo(contact,r.text)
         if phone:
             code, res = bind_id(phone, contact.uin, 1)
             bot.SendTo(contact, res)
