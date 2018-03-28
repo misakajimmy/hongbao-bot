@@ -1,6 +1,5 @@
 from wxpy import *
 from function import *
-from function import *
 
 bot = Bot(cache_path=True)
 bot.enable_puid()

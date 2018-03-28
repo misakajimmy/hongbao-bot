@@ -1,8 +1,37 @@
 import pymysql
 import requests
 import json
+import re
 from config import *
-from config import *
+from text_config import *
+
+
+def check_url(url):
+    try:
+        url = url.strip()
+        res = re.search('(https://h5.ele.me/hongbao/.*)', url).group(1)
+        return res
+    except:
+        return False
+
+
+def check_phone(phone):
+    try:
+        phone = phone.strip()
+        res = re.search('(1[0-9]{10})', phone).group(1)
+        return res
+    except:
+        return False
+
+def change_url(url):
+    try:
+        url = url.strip()
+        res = re.search('(https*://.*)', url).group(1)
+        result = requests.get(res)
+        url = result.url
+        return url
+    except:
+        return False
 
 
 def bind_id(phone, id, type):
@@ -64,3 +93,4 @@ def bot_get_hongbao(id, type, url):
             return -2, "服务器出错，请联系管理员！"
     else:
         return -3, "未绑定手机，请输入手机号绑定！"
+
