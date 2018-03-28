@@ -1,6 +1,6 @@
 from qqbot import QQBotSlot as qqbotslot, RunBot
 from qqbot import _bot as bot
-from function import *
+from bot_function import *
 from function import *
 
 
@@ -11,6 +11,9 @@ def onQQMessage(bot, contact, member, content):
             bot.SendTo(contact, help_text)
         phone = check_phone(content)
         url = change_url(content)
+        #此处开始施工：
+        if'查询' in content:
+            bot.SendTo(contract,'')
         if phone:
             code, res = bind_id(phone, contact.uin, 1)
             bot.SendTo(contact, res)
