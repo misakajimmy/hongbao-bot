@@ -12,6 +12,7 @@ def onQQMessage(bot, contact, member, content):
         phone = check_phone(content)
         url = change_url(content)
         #此处开始施工：
+        #测试vs的git提交1
         if'查询' in content:
             bot.SendTo(contract,'')
         if phone:
