@@ -23,16 +23,20 @@ def onQQMessage(bot, contact, member, content):
                 code, res = points_back(phone)
                 bot.SendTo(contact, res)
                 return
-            if "日志"in content:
-                if phone:
-                    logs_str_back="以下是你的点数日志\n"
-                    logs_detail,logs_changedate=get_log(phone)
-                    for times in logs_detail:
-                        logs_str_back+=str(logs_detail[times])+"  于日期"+str(logs_changedate[times])+"\n"
-                    bot.SendTo(contact,logs_str_back)
-                    
-                else :
-                    bot.SendTo(contact,log_error_text)
+            if "日志" in content:
+                if not phone:
+                    code, res = get_bind_id(contact.uin, 1)
+                    if code != 1:
+                        bot.SendTo(contact, not_bind_id_text)
+                        return
+                    else:
+                        phone = res
+                code, res = get_log(phone)
+                if code != 1:
+                    bot.SendTo(contact, res)
+                    return
+                str = format_log(res)
+                bot.SendTo(contact, str)
                 return
             if phone:
                 code, res = take_bind_id(phone, contact.uin, 1)
@@ -81,5 +85,5 @@ if __name__ == "__main__":
     # RunBot()
 
     # 测试环境
-    bot.Login(["-q", "2390225401"])
+    bot.Login(["-q", "2594623198"])
     bot.Run()
