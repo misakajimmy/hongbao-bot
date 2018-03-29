@@ -41,14 +41,14 @@ def change_url(url):
     except:
         return False
 
-def get_phone(id,content):
-    phone = check_phone(content)
-    if not phone:
-        code, res = get_bind_id(id, 1)
-        if code != 1:
-            phone = None
-        else:
-            phone = res[0][0]
+
+def get_phone(id):
+    code, res = get_bind_id(id, 1)
+    if code != 1:
+        phone = None
+    else:
+        phone = res[0][0]
+
     return phone
 
 
@@ -171,7 +171,7 @@ def format_task(res, phone):
         if log[7]:
             str1 += "成功"
             str1 += "，领取到"
-            str1 += str(log[5])
+            str1 += str(log[3])
             str1 += "元红包"
         else:
             str1 += "失败"

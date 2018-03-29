@@ -12,22 +12,23 @@ def onQQMessage(bot, contact, member, content):
                 return
             phone = check_phone(content)
             if not phone:
-                code, res = get_bind_id(contact.uin, 1)
-                if code != 1:
-                    bot.SendTo(contact, not_bind_id_text)
-                    return
-                else:
-                    phone = res[0][0]
+                phone = get_phone(contact.uin)
             else:
-                code, res = take_bind_id(phone, contact.uin, 1)
+                code, res = take_bind_id(phone, id, 1)
                 bot.SendTo(contact, res)
                 return
             url = change_url(content)
             if "查询" in content:
+                if not phone:
+                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    return
                 code, res = points_back(phone)
                 bot.SendTo(contact, res)
                 return
             if "日志" in content:
+                if not phone:
+                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    return
                 code, res = get_log(phone)
                 if code != 1:
                     bot.SendTo(contact, res)
@@ -36,6 +37,9 @@ def onQQMessage(bot, contact, member, content):
                 bot.SendTo(contact, str)
                 return
             if "记录" in content:
+                if not phone:
+                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    return
                 code, res = get_task(phone)
                 if code != 1:
                     bot.SendTo(contact, res)
@@ -44,6 +48,9 @@ def onQQMessage(bot, contact, member, content):
                 bot.SendTo(contact, str)
                 return
             if url and "newitd" not in url:
+                if not phone:
+                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    return
                 url = check_url(url)
                 if url:
                     bot.SendTo(contact, doing_hongbao_text)
@@ -53,7 +60,13 @@ def onQQMessage(bot, contact, member, content):
                     bot.SendTo(contact, share_error_url_text)
                 return
         elif contact.ctype == "group":
-            phone = get_phone(member.uin, content)
+            phone = check_phone(content)
+            if not phone:
+                phone = get_phone(contact.uin)
+            else:
+                code, res = take_bind_id(phone, id, 1)
+                bot.SendTo(contact, res)
+                return
             url = change_url(content)
             if "查询" in content:
                 if not phone:
