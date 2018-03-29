@@ -125,10 +125,10 @@ def format_log(res, phone):
     str1 += "\n"
     for log in res:
         if log[2] < 0:
-            str1 += "消耗"
+            str1 += "消耗-"
         else:
             str1 += "增加"
-        str1 += str(log[2])
+        str1 += str(abs(log[2]))
         str1 += "点---"
         str1 += log[4][5:]
         str1 += "\n"
