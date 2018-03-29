@@ -2,6 +2,7 @@ from qqbot import QQBotSlot as qqbotslot, RunBot
 from qqbot import _bot as bot
 from function import *
 
+
 @qqbotslot
 def onQQMessage(bot, contact, member, content):
     if not bot.isMe(contact, member) and contact.ctype == "buddy":
@@ -9,15 +10,15 @@ def onQQMessage(bot, contact, member, content):
             bot.SendTo(contact, help_text)
         phone = check_phone(content)
         url = change_url(content)
-        cphone=check_points(content)
+        cphone = check_points(content)
         if "查询" in content:
             try:
-                pointsres=pointsback(cphone)
-                bot.SendTo(contact,pointsres)
+                pointsres = pointsback(cphone)
+                bot.SendTo(contact, pointsres)
             except:
-                bot.SendTo(contact,check_point_error)
+                bot.SendTo(contact, check_point_error)
 
-        if phone and not"查询" in content:
+        if phone and not "查询" in content:
             code, res = bind_id(phone, contact.uin, 1)
             bot.SendTo(contact, res)
         if url:
@@ -31,15 +32,15 @@ def onQQMessage(bot, contact, member, content):
     elif not bot.isMe(contact, member) and contact.ctype == "group":
         phone = check_phone(content)
         url = change_url(content)
-        cphone=check_points(content)
+        cphone = check_points(content)
         if "查询" in content and cphone:
             try:
-                pointsres=pointsback(cphone)
-                bot.SendTo(contact,pointsres)
+                pointsres = pointsback(cphone)
+                bot.SendTo(contact, pointsres)
             except:
-                bot.SendTo(contact,check_point_error)
+                bot.SendTo(contact, check_point_error)
 
-        if phone and not"查询" in content:
+        if phone and not "查询" in content:
             code, res = bind_id(phone, contact.uin, 1)
             bot.SendTo(contact, res)
         if url:
@@ -56,5 +57,5 @@ def onQQMessage(bot, contact, member, content):
 # RunBot()
 
 # 测试环境
-bot.Login(["-q","2390225401"])
+bot.Login(["-q", "2390225401"])
 bot.Run()
