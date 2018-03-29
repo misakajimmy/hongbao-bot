@@ -2,27 +2,9 @@ import requests
 import json
 import re
 from text_config import *
-def get_task(phone):
-    data={
-            "phone" :phone,
-            "limit":20
-    }
-    r=requests.get("http://hb-api.newitd.com/get_user_task",data,timeout=30)
-    tasklist=""
-    if r.status_code == 200:
-        json_result = r.text[5:-1]
-        js_res = json.loads(json_result)
-        
-        for tasknum in js_res["res"]:
-            tasklist+="目标手机"+tasknum[1]+"领取结果为"
-            if(tasknum[7]==1):
-                tasklist+="成功"+"  领取到："+str(tasknum[5])+"元红包\n"
-            else:
-                tasklist+="失败"+"  没有领取到红包\n"
-    return tasklist
-
 
 def get_log(phone):
+
         data={
             "phone" :phone,
             "limit":20
@@ -139,5 +121,5 @@ def bot_get_hongbao(id, type, url):
     else:
         return -500, fail_to_connect_server_text
 
-#ares=get_task("18357117103")
-#print(ares)
+#los_back=get_log("18357117103")
+#print(los_back)

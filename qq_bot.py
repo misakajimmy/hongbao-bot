@@ -34,11 +34,6 @@ def onQQMessage(bot, contact, member, content):
                 else :
                     bot.SendTo(contact,log_error_text)
                 return
-            if "记录"in content:
-                if phone :
-                    get_test_res=get_task(phone)
-                    bot.SendTo(contact,get_test_res)
-                return
             if phone:
                 code, res = take_bind_id(phone, contact.uin, 1)
                 bot.SendTo(contact, res)
