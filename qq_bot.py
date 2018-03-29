@@ -11,7 +11,7 @@ def onQQMessage(bot, contact, member, content):
         phone = check_phone(content)
         url = change_url(content)
         cphone=check_points(content)
-        if "查询" in content and cphone:
+        if "查询" in content:
             try:
                 pointsres=pointsback(cphone)
                 bot.SendTo(contact,pointsres)
@@ -34,17 +34,12 @@ def onQQMessage(bot, contact, member, content):
         url = change_url(content)
         cphone=check_points(content)
         if "查询" in content and cphone:
-            data = {
-            "phone": cphone,
-            "url": ""
-            }
-            r =requests.get("http://hb-api.newitd.com/user_info",data,timeout=30)
-            if r.status_code == 200:
-                json_result = r.text[5:-1]
-                js_res = json.loads(json_result)
-                bot.SendTo(contact,js_res["info"])
-            else:
-                bot.SendTo(contact,"fail to check points")
+            try:
+                pointsres=pointsback(cphone)
+                bot.SendTo(contact,pointsres)
+            except:
+                bot.SendTo(contact,check_point_error)
+
         if phone and not"查询" in content:
             code, res = bind_id(phone, contact.uin, 1)
             bot.SendTo(contact, res)
