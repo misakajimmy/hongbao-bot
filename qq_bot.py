@@ -14,42 +14,42 @@ def onQQMessage(bot, contact, member, content):
             if not phone:
                 phone = get_phone(contact.uin)
             else:
-                code, res = take_bind_id(phone, id, 1)
+                code, res = take_bind_id(phone, contact.uin, 1)
                 bot.SendTo(contact, res)
                 return
             url = change_url(content)
             if "查询" in content:
                 if not phone:
-                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    bot.SendTo(contact, not_bind_id_text)
                     return
                 code, res = points_back(phone)
                 bot.SendTo(contact, res)
                 return
-            if "日志" in content:
-                if not phone:
-                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
-                    return
-                code, res = get_log(phone)
-                if code != 1:
-                    bot.SendTo(contact, res)
-                    return
-                str = format_log(res, phone)
-                bot.SendTo(contact, str)
-                return
-            if "记录" in content:
-                if not phone:
-                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
-                    return
-                code, res = get_task(phone)
-                if code != 1:
-                    bot.SendTo(contact, res)
-                    return
-                str = format_task(res, phone)
-                bot.SendTo(contact, str)
-                return
+            # if "日志" in content:
+            #     if not phone:
+            #         bot.SendTo(contact, not_bind_id_text)
+            #         return
+            #     code, res = get_log(phone)
+            #     if code != 1:
+            #         bot.SendTo(contact, res)
+            #         return
+            #     str = format_log(res, phone)
+            #     bot.SendTo(contact, str)
+            #     return
+            # if "记录" in content:
+            #     if not phone:
+            #         bot.SendTo(contact, not_bind_id_text)
+            #         return
+            #     code, res = get_task(phone)
+            #     if code != 1:
+            #         bot.SendTo(contact, res)
+            #         return
+            #     str = format_task(res, phone)
+            #     bot.SendTo(contact, str)
+            #     return
             if url and "newitd" not in url:
                 if not phone:
-                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    bot.SendTo(contact, not_bind_id_text)
                     return
                 url = check_url(url)
                 if url:
@@ -64,7 +64,7 @@ def onQQMessage(bot, contact, member, content):
             if not phone:
                 phone = get_phone(contact.uin)
             else:
-                code, res = take_bind_id(phone, id, 1)
+                code, res = take_bind_id(phone, contact.uin, 1)
                 bot.SendTo(contact, res)
                 return
             url = change_url(content)
@@ -75,28 +75,28 @@ def onQQMessage(bot, contact, member, content):
                 code, res = points_back(phone)
                 bot.SendTo(contact, member.name + "：" + res)
                 return
-            if "日志" in content:
-                if not phone:
-                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
-                    return
-                code, res = get_log(phone)
-                if code != 1:
-                    bot.SendTo(contact, member.name + "：" + res)
-                    return
-                str = format_log(res, phone)
-                bot.SendTo(contact, member.name + "：" + str)
-                return
-            if "记录" in content:
-                if not phone:
-                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
-                    return
-                code, res = get_task(phone)
-                if code != 1:
-                    bot.SendTo(contact, member.name + "：" + res)
-                    return
-                str = format_task(res, phone)
-                bot.SendTo(contact, member.name + "：" + str)
-                return
+            # if "日志" in content:
+            #     if not phone:
+            #         bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+            #         return
+            #     code, res = get_log(phone)
+            #     if code != 1:
+            #         bot.SendTo(contact, member.name + "：" + res)
+            #         return
+            #     str = format_log(res, phone)
+            #     bot.SendTo(contact, member.name + "：" + str)
+            #     return
+            # if "记录" in content:
+            #     if not phone:
+            #         bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+            #         return
+            #     code, res = get_task(phone)
+            #     if code != 1:
+            #         bot.SendTo(contact, member.name + "：" + res)
+            #         return
+            #     str = format_task(res, phone)
+            #     bot.SendTo(contact, member.name + "：" + str)
+            #     return
             if url and "newitd" not in url:
                 if not phone:
                     bot.SendTo(contact, member.name + "：" + not_bind_id_text)
