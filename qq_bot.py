@@ -1,7 +1,6 @@
 from qqbot import QQBotSlot as qqbotslot, RunBot
 from qqbot import _bot as bot
 from function import *
-import requests
 
 @qqbotslot
 def onQQMessage(bot, contact, member, content):
