@@ -17,11 +17,13 @@ def onQQMessage(bot, contact, member, content):
             "url": ""
             }
             r =requests.get("http://hb-api.newitd.com/user_info",data,timeout=30)
-            if result.status_code == 200:
-                bot.SendTo(contact,r.text)
+            if r.status_code == 200:
+                json_result = r.text[5:-1]
+                js_res = json.loads(json_result)
+                bot.SendTo(contact,js_res["info"])
             else:
                 bot.SendTo(contact,"fail to check points")
-        if phone:
+        if phone and not"查询" in content:
             code, res = bind_id(phone, contact.uin, 1)
             bot.SendTo(contact, res)
         if url:
@@ -35,9 +37,22 @@ def onQQMessage(bot, contact, member, content):
     elif not bot.isMe(contact, member) and contact.ctype == "group":
         phone = check_phone(content)
         url = change_url(content)
-        if phone:
-            code, res = bind_id(phone, member.uin, 1)
-            bot.SendTo(contact, member.name + "：" + res)
+        cphone=check_points(content)
+        if "查询" in content and cphone:
+            data = {
+            "phone": cphone,
+            "url": ""
+            }
+            r =requests.get("http://hb-api.newitd.com/user_info",data,timeout=30)
+            if r.status_code == 200:
+                json_result = r.text[5:-1]
+                js_res = json.loads(json_result)
+                bot.SendTo(contact,js_res["info"])
+            else:
+                bot.SendTo(contact,"fail to check points")
+        if phone and not"查询" in content:
+            code, res = bind_id(phone, contact.uin, 1)
+            bot.SendTo(contact, res)
         if url:
             url = check_url(url)
             if url:
@@ -52,5 +67,5 @@ def onQQMessage(bot, contact, member, content):
 # RunBot()
 
 # 测试环境
-bot.Login(['-q', '2594623198', '-u', 'somebody'])
+bot.Login(["-q","2390225401"])
 bot.Run()
