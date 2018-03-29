@@ -90,7 +90,8 @@ def get_bind_id(id, type):
 def bot_get_hongbao(id, type, url):
     code, phone = get_bind_id(id, type)
     if code != 1:
-        return code, phone
+        return code, not_bind_id_text
+
     data = {
         "phone": phone,
         "url": url,

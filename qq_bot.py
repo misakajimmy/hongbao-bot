@@ -11,18 +11,20 @@ def onQQMessage(bot, contact, member, content):
                 bot.SendTo(contact, help_text)
             phone = check_phone(content)
             url = change_url(content)
-            cphone = check_points(content)
-            if "查询" in content:
-                try:
-                    points_res = points_back(cphone)
-                    bot.SendTo(contact, points_res)
-                except:
-                    bot.SendTo(contact, check_point_error_text)
-
-            if phone and not "查询" in content:
+            if phone:
                 code, res = take_bind_id(phone, contact.uin, 1)
                 bot.SendTo(contact, res)
-            if url:
+            if "查询" in content:
+                if not phone:
+                    code, res = get_bind_id(contact.uin, 1)
+                    if code != 1:
+                        bot.SendTo(contact, not_bind_id_text)
+                        return
+                    else:
+                        phone = res
+                code, res = points_back(phone)
+                bot.SendTo(contact, res)
+            if url and url not in "newitd":
                 url = check_url(url)
                 if url:
                     bot.SendTo(contact, doing_hongbao_text)
@@ -33,18 +35,20 @@ def onQQMessage(bot, contact, member, content):
         elif contact.ctype == "group":
             phone = check_phone(content)
             url = change_url(content)
-            cphone = check_points(content)
-            if "查询" in content and cphone:
-                try:
-                    points_res = points_back(cphone)
-                    bot.SendTo(contact, points_res)
-                except:
-                    bot.SendTo(contact, check_point_error_text)
-
-            if phone and not "查询" in content:
+            if phone:
                 code, res = take_bind_id(phone, contact.uin, 1)
-                bot.SendTo(contact, res)
-            if url:
+                bot.SendTo(contact, member.name + "：" + res)
+            if "查询" in content:
+                if not phone:
+                    code, res = get_bind_id(contact.uin, 1)
+                    if code != 1:
+                        bot.SendTo(contact, member.name + "：" + res)
+                        return
+                    else:
+                        phone = res
+                code, res = points_back(phone)
+                bot.SendTo(contact, member.name + "：" + res)
+            if url and url not in "newitd":
                 url = check_url(url)
                 if url:
                     bot.SendTo(contact, member.name + "：" + doing_hongbao_text)
@@ -59,5 +63,5 @@ if __name__ == "__main__":
     # RunBot()
 
     # 测试环境
-    bot.Login(["-q", "2390225401"])
+    bot.Login(["-q", "2594623198"])
     bot.Run()
