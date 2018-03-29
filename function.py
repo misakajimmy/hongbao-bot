@@ -3,7 +3,22 @@ import json
 import re
 from text_config import *
 
-
+def get_log(phone):
+    try:
+        data={
+            "phone" :phone,
+        }
+        r=requests.get("http://hb-api.newitd.com/get_user_log",data,timeout=30)
+        if r.status_code == 200:
+            json_result = r.text[5:-1]
+            js_res = json.loads(json_result)
+            log_res=[]
+            for lognum in len(js_res["res"]):
+                log_res.append(js_res["res"][lognum][2])
+                print(js_res["res"][lognum][2])
+            return log_res1    
+    except:
+        return False
 def check_points(str):
     try:
         str = str.strip("查询")
@@ -103,3 +118,6 @@ def bot_get_hongbao(id, type, url):
         return js_res["code"], js_res["info"]
     else:
         return -500, fail_to_connect_server_text
+
+los_back=get_log("18357117103")
+print(los_back)
