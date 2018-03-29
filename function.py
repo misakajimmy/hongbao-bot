@@ -1,22 +1,7 @@
-import pymysql
 import requests
 import json
 import re
 from text_config import *
-
-
-def points_back(phone):
-    data = {
-        "phone": phone,
-        "url": ""
-    }
-    r = requests.get("http://hb-api.newitd.com/user_info", data, timeout=30)
-    if r.status_code == 200:
-        json_result = r.text[5:-1]
-        js_res = json.loads(json_result)
-        return js_res["info"]
-    else:
-        return -1, "fail to check points"
 
 
 def check_points(str):
@@ -57,62 +42,63 @@ def change_url(url):
         return False
 
 
-def bind_id(phone, id, type):
-    # 建立数据库连接
-    try:
-        db = pymysql.connect(db_host, db_user, db_password, db_database, charset="utf8")
-        cursor = db.cursor()
-    except:
-        return -1, fail_to_connect_mysql_text
-    if type == 1:
-        sql = "SELECT phone FROM bot WHERE qqid=%s"
+def points_back(phone):
+    data = {
+        "phone": phone,
+    }
+    r = requests.get("http://hb-api.newitd.com/user_info", data, timeout=30)
+    if r.status_code == 200:
+        json_result = r.text[5:-1]
+        js_res = json.loads(json_result)
+        return js_res["code"], js_res["info"]
     else:
-        sql = "SELECT phone FROM bot WHERE wxid=%s"
-    cursor.execute(sql, id)
-    result = cursor.fetchall()
-    if not result:
-        if type == 1:
-            sql = "INSERT INTO bot(qqid, phone) VALUES (%s,%s)"
-        else:
-            sql = "INSERT INTO bot(wxid, phone) VALUES (%s,%s)"
-        cursor.execute(sql, (id, phone))
-        db.commit()
-        return 1, success_insert_bind
+        return -500, fail_to_connect_server_text
+
+
+def take_bind_id(phone, id, type):
+    data = {
+        "phone": phone,
+        "id": id,
+        "type": type
+    }
+    r = requests.get("http://hb-api.newitd.com/take_bind_id", data, timeout=30)
+    if r.status_code == 200:
+        json_result = r.text[5:-1]
+        js_res = json.loads(json_result)
+        return js_res["code"], js_res["info"]
     else:
-        if type == 1:
-            sql = "UPDATE bot SET phone=%s WHERE qqid=%s"
+        return -500, fail_to_connect_server_text
+
+
+def get_bind_id(id, type):
+    data = {
+        "id": id,
+        "type": type
+    }
+    r = requests.get("http://hb-api.newitd.com/get_bind_id", data, timeout=30)
+    if r.status_code == 200:
+        json_result = r.text[5:-1]
+        js_res = json.loads(json_result)
+        if js_res["code"] != 1:
+            return js_res["code"], js_res["info"]
         else:
-            sql = "UPDATE bot SET phone=%s WHERE wxid=%s"
-        cursor.execute(sql, (phone, id))
-        db.commit()
-        return 2, success_update_bind
+            return js_res["code"], js_res["phone"]
+    else:
+        return -500, fail_to_connect_server_text
 
 
 def bot_get_hongbao(id, type, url):
-    # 建立数据库连接
-    try:
-        db = pymysql.connect(db_host, db_user, db_password, db_database, charset="utf8")
-        cursor = db.cursor()
-    except:
-        return -1, "连接数据库失败！请联系管理员！"
-    if type == 1:
-        sql = "SELECT phone FROM bot WHERE qqid=%s"
+    code, phone = get_bind_id(id, type)
+    if code != 1:
+        return code, phone
+    data = {
+        "phone": phone,
+        "url": url,
+    }
+    r = requests.get("http://hb-api.newitd.com/hongbao", data, timeout=30)
+    if r.status_code == 200:
+        json_result = r.text[5:-1]
+        js_res = json.loads(json_result)
+        return js_res["code"], js_res["info"]
     else:
-        sql = "SELECT phone FROM bot WHERE wxid=%s"
-    cursor.execute(sql, id)
-    result = cursor.fetchall()
-    if result:
-        phone = result[0][0]
-        data = {
-            "phone": phone,
-            "url": url,
-        }
-        result = requests.get("http://hb-api.newitd.com/hongbao", data, timeout=30)
-        if result.status_code == 200:
-            json_result = result.text[5:-1]
-            js_res = json.loads(json_result)
-            return 1, js_res['info']
-        else:
-            return -2, "服务器出错，请联系管理员！"
-    else:
-        return -3, "未绑定手机，请输入手机号绑定！"
+        return -500, fail_to_connect_server_text
