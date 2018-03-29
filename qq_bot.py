@@ -53,24 +53,19 @@ def onQQMessage(bot, contact, member, content):
                     bot.SendTo(contact, share_error_url_text)
                 return
         elif contact.ctype == "group":
-            phone = check_phone(content)
-            if not phone:
-                code, res = get_bind_id(member.uin, 1)
-                if code != 1:
-                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
-                    return
-                else:
-                    phone = res[0][0]
-            else:
-                code, res = take_bind_id(phone, member.uin, 1)
-                bot.SendTo(contact, member.name + "：" + res)
-                return
+            phone = get_phone(member.uin, content)
             url = change_url(content)
             if "查询" in content:
+                if not phone:
+                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    return
                 code, res = points_back(phone)
                 bot.SendTo(contact, member.name + "：" + res)
                 return
             if "日志" in content:
+                if not phone:
+                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    return
                 code, res = get_log(phone)
                 if code != 1:
                     bot.SendTo(contact, member.name + "：" + res)
@@ -79,6 +74,9 @@ def onQQMessage(bot, contact, member, content):
                 bot.SendTo(contact, member.name + "：" + str)
                 return
             if "记录" in content:
+                if not phone:
+                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    return
                 code, res = get_task(phone)
                 if code != 1:
                     bot.SendTo(contact, member.name + "：" + res)
@@ -87,6 +85,9 @@ def onQQMessage(bot, contact, member, content):
                 bot.SendTo(contact, member.name + "：" + str)
                 return
             if url and "newitd" not in url:
+                if not phone:
+                    bot.SendTo(contact, member.name + "：" + not_bind_id_text)
+                    return
                 url = check_url(url)
                 if url:
                     bot.SendTo(contact, member.name + "：" + doing_hongbao_text)

@@ -41,6 +41,16 @@ def change_url(url):
     except:
         return False
 
+def get_phone(id,content):
+    phone = check_phone(content)
+    if not phone:
+        code, res = get_bind_id(id, 1)
+        if code != 1:
+            phone = None
+        else:
+            phone = res[0][0]
+    return phone
+
 
 def points_back(phone):
     data = {
