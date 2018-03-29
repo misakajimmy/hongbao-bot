@@ -4,21 +4,23 @@ import re
 from text_config import *
 
 def get_log(phone):
-    try:
+
         data={
             "phone" :phone,
+            "limit":20
         }
         r=requests.get("http://hb-api.newitd.com/get_user_log",data,timeout=30)
         if r.status_code == 200:
             json_result = r.text[5:-1]
             js_res = json.loads(json_result)
-            log_res=[]
-            for lognum in len(js_res["res"]):
-                log_res.append(js_res["res"][lognum][2])
-                print(js_res["res"][lognum][2])
-            return log_res1    
-    except:
-        return False
+            log_change=[]
+            log_date=[]
+            for lognum in js_res["res"]:
+                log_change.append(lognum[2])
+                log_date.append(lognum[4])
+                #print(js_res["res"][lognum][2])
+            return log_change,log_date
+
 def check_points(str):
     try:
         str = str.strip("查询")
@@ -119,5 +121,5 @@ def bot_get_hongbao(id, type, url):
     else:
         return -500, fail_to_connect_server_text
 
-los_back=get_log("18357117103")
-print(los_back)
+#los_back=get_log("18357117103")
+#print(los_back)

@@ -25,10 +25,15 @@ def onQQMessage(bot, contact, member, content):
                 return
             if "日志"in content:
                 if phone:
-                    logs_back=get_log(phone)
-                    bot.SendTo(contact,logs_back)
+                    logs_str_back="以下是你的点数日志\n"
+                    logs_detail,logs_changedate=get_log(phone)
+                    for times in logs_detail:
+                        logs_str_back+=str(logs_detail[times])+"  于日期"+str(logs_changedate[times])+"\n"
+                    bot.SendTo(contact,logs_str_back)
+                    
                 else :
                     bot.SendTo(contact,log_error_text)
+                return
             if phone:
                 code, res = take_bind_id(phone, contact.uin, 1)
                 bot.SendTo(contact, res)
