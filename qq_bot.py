@@ -16,7 +16,7 @@ def onQQMessage(bot, contact, member, content):
                 pointsres=pointsback(cphone)
                 bot.SendTo(contact,pointsres)
             except:
-                bot.SendTo(contact,"fail to check points")
+                bot.SendTo(contact,check_point_error)
 
         if phone and not"查询" in content:
             code, res = bind_id(phone, contact.uin, 1)
