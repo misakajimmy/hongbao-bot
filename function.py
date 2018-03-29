@@ -4,6 +4,19 @@ import json
 import re
 #from config import *
 from text_config import *
+def pointsback(phone):
+    data = {
+            "phone": phone,
+            "url": ""
+           }
+    r =requests.get("http://hb-api.newitd.com/user_info",data,timeout=30)
+    if r.status_code == 200:
+        json_result = r.text[5:-1]
+        js_res = json.loads(json_result)
+        return js_res["info"]
+    else:
+        return -1,"fail to check points"
+
 
 def check_points(str):
     try:
