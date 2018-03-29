@@ -9,11 +9,9 @@ def onQQMessage(bot, contact, member, content):
         if contact.ctype == "buddy":
             if "帮助" in content:
                 bot.SendTo(contact, help_text)
+                return
             phone = check_phone(content)
             url = change_url(content)
-            if phone:
-                code, res = take_bind_id(phone, contact.uin, 1)
-                bot.SendTo(contact, res)
             if "查询" in content:
                 if not phone:
                     code, res = get_bind_id(contact.uin, 1)
@@ -24,6 +22,11 @@ def onQQMessage(bot, contact, member, content):
                         phone = res
                 code, res = points_back(phone)
                 bot.SendTo(contact, res)
+                return
+            if phone:
+                code, res = take_bind_id(phone, contact.uin, 1)
+                bot.SendTo(contact, res)
+                return
             if url and url not in "newitd":
                 url = check_url(url)
                 if url:
@@ -32,15 +35,13 @@ def onQQMessage(bot, contact, member, content):
                     bot.SendTo(contact, res)
                 else:
                     bot.SendTo(contact, share_error_url_text)
+                return
         elif contact.ctype == "group":
             phone = check_phone(content)
             url = change_url(content)
-            if phone:
-                code, res = take_bind_id(phone, contact.uin, 1)
-                bot.SendTo(contact, member.name + "：" + res)
             if "查询" in content:
                 if not phone:
-                    code, res = get_bind_id(contact.uin, 1)
+                    code, res = get_bind_id(member.uin, 1)
                     if code != 1:
                         bot.SendTo(contact, member.name + "：" + res)
                         return
@@ -48,6 +49,11 @@ def onQQMessage(bot, contact, member, content):
                         phone = res
                 code, res = points_back(phone)
                 bot.SendTo(contact, member.name + "：" + res)
+                return
+            if phone:
+                code, res = take_bind_id(phone, member.uin, 1)
+                bot.SendTo(contact, member.name + "：" + res)
+                return
             if url and url not in "newitd":
                 url = check_url(url)
                 if url:
@@ -56,6 +62,7 @@ def onQQMessage(bot, contact, member, content):
                     bot.SendTo(contact, member.name + "：" + res)
                 else:
                     bot.SendTo(contact, member.name + "：" + share_error_url_text)
+                return
 
 
 if __name__ == "__main__":
