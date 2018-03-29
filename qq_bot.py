@@ -19,7 +19,7 @@ def onQQMessage(bot, contact, member, content):
                         bot.SendTo(contact, not_bind_id_text)
                         return
                     else:
-                        phone = res
+                        phone = res[0][0]
                 code, res = points_back(phone)
                 bot.SendTo(contact, res)
                 return
@@ -30,12 +30,12 @@ def onQQMessage(bot, contact, member, content):
                         bot.SendTo(contact, not_bind_id_text)
                         return
                     else:
-                        phone = res
+                        phone = res[0][0]
                 code, res = get_log(phone)
                 if code != 1:
                     bot.SendTo(contact, res)
                     return
-                str = format_log(res)
+                str = format_log(res,phone)
                 bot.SendTo(contact, str)
                 return
             if "记录" in content:
@@ -45,12 +45,12 @@ def onQQMessage(bot, contact, member, content):
                         bot.SendTo(contact, not_bind_id_text)
                         return
                     else:
-                        phone = res
+                        phone = res[0][0]
                 code, res = get_task(phone)
                 if code != 1:
                     bot.SendTo(contact, res)
                     return
-                str = format_task(res)
+                str = format_task(res,phone)
                 bot.SendTo(contact, str)
                 return
             if phone:

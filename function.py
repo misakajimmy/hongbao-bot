@@ -119,13 +119,15 @@ def get_log(phone):
         return -500, fail_to_connect_server_text
 
 
-def format_log(res):
-    str1 = "以下是你的点数日志\n"
+def format_log(res, phone):
+    str1 = "以下是你的点数日志，"
+    str1 += phone
+    str1 += "\n"
     for log in res:
         if log[2] < 0:
-            str1 += "增加"
-        else:
             str1 += "消耗"
+        else:
+            str1 += "增加"
         str1 += str(log[2])
         str1 += "点---"
         str1 += log[4][5:]
@@ -148,14 +150,14 @@ def get_task(phone):
         return -500, fail_to_connect_server_text
 
 
-def format_task(res):
-    str1 = "以下是你的任务日志\n"
+def format_task(res, phone):
+    str1 = "以下是你的任务日志，"
+    str1 += phone
+    str1 += "\n"
     for log in res:
         str1 += "时间："
         str1 += log[6][5:]
-        str1 += "，手机"
-        str1 += log[1]
-        str1 += "领取"
+        str1 += "，领取"
         if log[7]:
             str1 += "成功"
             str1 += "，领取到"
