@@ -38,16 +38,26 @@ def onQQMessage(bot, contact, member, content):
                 str = format_log(res)
                 bot.SendTo(contact, str)
                 return
-            if "记录"in content:
-                if phone:
-                    taskres = get_task(phone)
-                    bot.SendTo(contact,taskres)
+            if "记录" in content:
+                if not phone:
+                    code, res = get_bind_id(contact.uin, 1)
+                    if code != 1:
+                        bot.SendTo(contact, not_bind_id_text)
+                        return
+                    else:
+                        phone = res
+                code, res = get_task(phone)
+                if code != 1:
+                    bot.SendTo(contact, res)
+                    return
+                str = format_task(res)
+                bot.SendTo(contact, str)
                 return
             if phone:
                 code, res = take_bind_id(phone, contact.uin, 1)
                 bot.SendTo(contact, res)
                 return
-            if url and url not in "newitd":
+            if url and "newitd" not in url:
                 url = check_url(url)
                 if url:
                     bot.SendTo(contact, doing_hongbao_text)

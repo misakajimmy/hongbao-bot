@@ -4,26 +4,6 @@ import re
 from text_config import *
 
 
-def get_task(phone):
-    data = {
-        "phone": phone,
-        "limit": 20
-    }
-    r = requests.get("http://hb-api.newitd.com/get_user_task", data, timeout=30)
-    tasklist = ""
-    if r.status_code == 200:
-        json_result = r.text[5:-1]
-        js_res = json.loads(json_result)
-
-        for tasknum in js_res["res"]:
-            tasklist += "目标手机" + tasknum[1] + "领取结果为"
-            if (tasknum[7] == 1):
-                tasklist += "成功" + "  领取到：" + str(tasknum[5]) + "元红包\n"
-            else:
-                tasklist += "失败" + "  没有领取到红包\n"
-    return tasklist
-
-
 def check_points(str):
     try:
         str = str.strip("查询")
@@ -149,5 +129,39 @@ def format_log(res):
         str1 += str(log[2])
         str1 += "点---"
         str1 += log[4][5:]
+        str1 += "\n"
+    return str1
+
+
+def get_task(phone):
+    data = {
+        "phone": phone,
+        "limit": 10
+    }
+    r = requests.get("http://hb-api.newitd.com/get_user_task", data, timeout=30)
+
+    if r.status_code == 200:
+        json_result = r.text[5:-1]
+        js_res = json.loads(json_result)
+        return js_res["code"], js_res["res"]
+    else:
+        return -500, fail_to_connect_server_text
+
+
+def format_task(res):
+    str1 = "以下是你的任务日志\n"
+    for log in res:
+        str1 += "时间："
+        str1 += log[6][5:]
+        str1 += "，手机"
+        str1 += log[1]
+        str1 += "领取"
+        if log[7]:
+            str1 += "成功"
+            str1 += "，领取到"
+            str1 += str(log[5])
+            str1 += "元红包"
+        else:
+            str1 += "失败"
         str1 += "\n"
     return str1
